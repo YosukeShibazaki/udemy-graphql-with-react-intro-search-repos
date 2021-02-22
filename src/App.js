@@ -1,18 +1,8 @@
 import client from './client';
 import { ApolloProvider } from 'react-apollo';
-// GraphQLのコードをparse(JS => GraphQLのクエリに変換)してくれる
-import gql from 'graphql-tag';
 // GraphQLのクエリを送信するためのコンポーネント
 import { Query } from 'react-apollo';
-
-const ME = gql`
-  query me {
-    user(login: "YosukeShibazaki") {
-      id
-      avatarUrl
-    }
-  }
-`
+import { ME } from './graphql';
 
 function App() {
   return (
