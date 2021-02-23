@@ -5,8 +5,11 @@ import { ApolloProvider } from 'react-apollo';
 import { Query } from 'react-apollo';
 import { ME } from './graphql';
 import { SEARCH_REPOSITORIES } from './graphql';
-import { getNodeText } from '@testing-library/react';
 
+const StarButton = props => {
+  const totalCount = props.node.stargazers.totalCount;
+  return <button>{totalCount === 1 ? "1 star" : `${totalCount} stars`}</button>
+}
 
 const PER_PAGE = 5;
 const DEFAULT_STATE = {
@@ -92,6 +95,8 @@ const App = () => {
                       return (
                         <li key={key}>
                           <a href={node.url} target="_brank">{node.name}</a>
+                          &nbsp;
+                          <StarButton node={node}/>
                         </li>
                       )
                     })
