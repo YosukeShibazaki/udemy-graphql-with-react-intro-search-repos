@@ -6,7 +6,7 @@ import { Query } from 'react-apollo';
 import { ME } from './graphql';
 import { SEARCH_REPOSITORIES } from './graphql';
 
-const VARIAVLES = {
+const DEFAULT_STATE = {
   // GraphQLのクエリをJavaScriptで書くときはJSONではなく連想配列形式で書く
   first: 5,
   after: null,
@@ -17,7 +17,7 @@ const VARIAVLES = {
 
 const App = () => {
   // stateの初期化
-  const [ query, setQuery ] = useState(VARIAVLES)
+  const [ variables, setVariables ] = useState(DEFAULT_STATE)
 
   return (
     <ApolloProvider client={client}>
@@ -34,9 +34,15 @@ const App = () => {
           }
         }
       </Query> */}
+      <form onSubmit={e => e.preventDefault()}>
+        <input
+          value={variables.query}
+          onChange={e => setVariables({...variables, query: e.target.value})}
+        />
+      </form>
       <Query
         query={SEARCH_REPOSITORIES}
-        variables={query}
+        variables={variables}
       >
         {
           ({loading, error, data}) => {
