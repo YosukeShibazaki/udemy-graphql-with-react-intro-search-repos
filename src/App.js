@@ -22,6 +22,17 @@ const App = () => {
   // stateの初期化
   const [ variables, setVariables ] = useState(DEFAULT_STATE)
 
+  // Previousボタン押下時の処理。前の5件のページ情報を表示させる
+  const goPrevious = search => {
+    setVariables({
+      ...variables,
+      first: null,
+      after: null,
+      last: PER_PAGE,
+      before: search.pageInfo.startCursor
+    })
+  }
+
   // Nextボタン押下時の処理。次の5件のページ情報を表示させる
   const goNext = search => {
     setVariables({
@@ -86,6 +97,18 @@ const App = () => {
                     })
                   }
                 </ul>
+
+                {
+                    search.pageInfo.hasPreviousPage === true ?
+                    <button
+                      onClick={e => goPrevious(search)}
+                    >
+                      Previous
+                    </button>
+                    :
+                    null
+                  }
+
                 {
                     search.pageInfo.hasNextPage === true ?
                     <button
