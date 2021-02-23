@@ -5,10 +5,13 @@ import { ApolloProvider } from 'react-apollo';
 import { Query } from 'react-apollo';
 import { ME } from './graphql';
 import { SEARCH_REPOSITORIES } from './graphql';
+import { getNodeText } from '@testing-library/react';
 
+
+const PER_PAGE = 5;
 const DEFAULT_STATE = {
   // GraphQLのクエリをJavaScriptで書くときはJSONではなく連想配列形式で書く
-  first: 5,
+  first: PER_PAGE,
   after: null,
   last: null,
   before: null,
@@ -18,6 +21,17 @@ const DEFAULT_STATE = {
 const App = () => {
   // stateの初期化
   const [ variables, setVariables ] = useState(DEFAULT_STATE)
+
+  // Nextボタン押下時の処理。次の5件のページ情報を表示させる
+  const goNext = search => {
+    setVariables({
+      ...variables,
+      first: PER_PAGE,
+      after: search.pageInfo.endCursor,
+      last: null,
+      before: null
+    })
+  }
 
   return (
     <ApolloProvider client={client}>
@@ -72,6 +86,16 @@ const App = () => {
                     })
                   }
                 </ul>
+                {
+                    search.pageInfo.hasNextPage === true ?
+                    <button
+                      onClick={e => goNext(search)}
+                    >
+                      Next
+                    </button>
+                    :
+                    null
+                  }
               </>
             )
           }
