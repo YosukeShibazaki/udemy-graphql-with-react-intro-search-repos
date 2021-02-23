@@ -52,7 +52,12 @@ const App = () => {
             if(error) return `Error ${error.message}`
             // 正常にデータが返ってきた場合
             console.log(data)
-            return <div></div>
+
+            const search = data.search;
+            const repositoryCount = search.repositoryCount;
+            const repositoryUnit = repositoryCount === 1 ? 'Repository' : 'Repositories';
+            const title = `GitHub Repositories Search Results ${repositoryCount} ${repositoryUnit}`
+            return <h2>{title}</h2>
           }
         }
       </Query>
