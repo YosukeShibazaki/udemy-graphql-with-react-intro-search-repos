@@ -26,7 +26,15 @@ const StarButton = props => {
   }
 
   return (
-    <Mutation mutation={viewerHasStarred ? REMOVE_STAR : ADD_STAR}>
+    <Mutation
+      mutation={viewerHasStarred ? REMOVE_STAR : ADD_STAR}
+      refetchQueries={[
+        {
+          query: SEARCH_REPOSITORIES,
+          variables: props.variables
+        }
+      ]}
+    >
       {
         addOrRemoveStar => <StarStatus addOrRemoveStar={addOrRemoveStar}/>
       }
@@ -119,7 +127,10 @@ const App = () => {
                         <li key={key}>
                           <a href={node.url} target="_brank">{node.name}</a>
                           &nbsp;
-                          <StarButton node={node}/>
+                          <StarButton
+                            node={node}
+                            variables={variables}
+                          />
                         </li>
                       )
                     })
