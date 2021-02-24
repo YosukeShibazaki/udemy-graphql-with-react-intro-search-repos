@@ -1,17 +1,37 @@
 import { useState } from 'react';
 import client from './client';
-import { ApolloProvider } from 'react-apollo';
 // GraphQLのクエリを送信するためのコンポーネント
-import { Query } from 'react-apollo';
+import { ApolloProvider, Mutation, Query } from 'react-apollo';
 import { ME } from './graphql';
-import { SEARCH_REPOSITORIES } from './graphql';
+import { SEARCH_REPOSITORIES, ADD_STAR } from './graphql';
 
+// starの数を表示させるボタンコンポーネント
 const StarButton = props => {
   const node = props.node
   const totalCount = node.stargazers.totalCount;
   const viewerHasStarred = node.viewerHasStarred
   const starCount = totalCount === 1 ? "1 star" : `${totalCount} stars`
-  return <button>{starCount} | {viewerHasStarred ? 'starred' : '-'}</button>
+  const StarStatus = ({addStar}) => {
+    return (
+      <button
+        onClick={
+          () => addStar({
+            variables: { input: { starrableId: node.id }}
+          })
+        }
+      >
+        {starCount} | {viewerHasStarred ? 'starred' : '-'}
+      </button>
+    )
+  }
+
+  return (
+    <Mutation mutation={ADD_STAR}>
+      {
+        addStar => <StarStatus addStar={addStar}/>
+      }
+    </Mutation>
+  )
 }
 
 const PER_PAGE = 5;
